@@ -1,0 +1,5 @@
+.zip
+out/
+input.txt
+src/hw3*
+.gitignore
