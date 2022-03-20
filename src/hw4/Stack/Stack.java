@@ -14,9 +14,9 @@ class Node<T> {
 
 public class Stack<T> {
     int t = 0;
-    Node<T> head = new Node<T>();
+    Node<T> head = new Node<>();
     public void push(T data) {
-        Node<T> newHead = new Node<T>(data);
+        Node<T> newHead = new Node<>(data);
         newHead.next = head;
         head = newHead;
     }
