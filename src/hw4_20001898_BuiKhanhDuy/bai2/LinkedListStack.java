@@ -31,6 +31,7 @@ public class LinkedListStack<E> implements StackInterface<E> {
   @Override
   public E pop() {
     // Lấy một phần tử khỏi stack
+    if (isEmpty()) return null;
     E result = stack.element;
     stack = stack.next;
     return result;
@@ -45,6 +46,7 @@ public class LinkedListStack<E> implements StackInterface<E> {
   @Override
   public E top() {
     // Lấy giá trị phần tử đầu tiên của stack
+    if (isEmpty()) return null;
     return stack.element;
   }
 

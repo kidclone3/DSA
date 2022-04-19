@@ -4,20 +4,21 @@ import java.util.Iterator;
 
 public class TestDriver {
   public static void main(String[] args) {
-    ArrayQueue<Integer> queue = new ArrayQueue<>(5);
+//    ArrayQueue<Integer> queue = new ArrayQueue<>(5);
+    LinkedListQueue<Integer> queue = new LinkedListQueue<>();
     for (int i = 1; i <= 5; i++) {
       queue.enqueue(i);
     }
-    print(queue);
+//    print(queue);
     queue.dequeue();
     queue.dequeue();
     queue.enqueue(7);
     queue.enqueue(8);
     print(queue);
-    queue.printArray();
+//    queue.printArray();
   }
 
-  static void print(ArrayQueue<Integer> queue) {
+  static void print(LinkedListQueue<Integer> queue) {
     Iterator<Integer> it = queue.iterator();
     while (it.hasNext()) System.out.println(it.next());
     System.out.println("-----------------------------");

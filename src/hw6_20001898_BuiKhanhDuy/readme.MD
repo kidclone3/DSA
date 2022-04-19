@@ -1,0 +1,1 @@
+Bài 1 chỉ là cài đặt priority queue bằng mảng sắp xếp với không sắp xếp. Việc này quá đơn giản nên mình sẽ chỉ sử dụng head pq  của bài 2.

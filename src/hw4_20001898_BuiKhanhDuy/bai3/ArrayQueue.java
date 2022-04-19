@@ -2,7 +2,7 @@ package hw4_20001898_BuiKhanhDuy.bai3;
 
 import java.util.Iterator;
 
-public class ArrayQueue<E> implements QueueInterface<E> {
+public class ArrayQueue<E> implements QueueInterface<E>{
 
   private E[] queue;
   private int n = 0;
