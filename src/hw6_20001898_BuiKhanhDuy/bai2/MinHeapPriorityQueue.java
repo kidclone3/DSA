@@ -12,9 +12,13 @@ public class MinHeapPriorityQueue<K extends Comparable, E> {
   }
 
   ArrEntry<K, E> heapPQ[];
-  protected int n = 1; // Mặc định
+  protected int n = 0; // Mặc định
   protected int capability = 1000; // Kích cỡ tối đa
   // Vì ta bắt đầu từ 1 nên thực tế sẽ có 101 phần tử trong mảng.
+
+  int size() {
+    return n;
+  }
 
   MinHeapPriorityQueue() { // Nếu không truyền gì vào thì kích cỡ sẽ mặc định là 100.
     heapPQ = new ArrEntry[capability];
@@ -26,18 +30,33 @@ public class MinHeapPriorityQueue<K extends Comparable, E> {
   }
 
   boolean isEmpty() {
-    return n == 1;
+    return n == 0;
   }
 
-  ArrEntry getMin() {
-    return heapPQ[1];
+  int left(int i) {
+    return i << 1;
+  }
+
+  int right(int i) {
+    return i << 1 | 1;
+  }
+
+  int parent(int i) {
+    return i >> 1; // >>1 ~ /2, nhưng máy chạy nhanh hơn
+  }
+
+  boolean isLeaf(int i) { // Ktra xem có còn thuộc cây không .
+    return (i > (n >> 1) && i < n);
   }
 
   void insert(K key, E element) {
     // Thêm vào vị trí cuối cùng, sau đó gọi hàm upHeap.
-    heapPQ[n] = new ArrEntry<K, E>(key, element);
+    heapPQ[++n] = new ArrEntry<K, E>(key, element);
     upHeap(n);
-    n++;
+  }
+
+  ArrEntry getMin() {
+    return heapPQ[1];
   }
 
   void removeMin() { // Xóa min đi.
@@ -45,19 +64,11 @@ public class MinHeapPriorityQueue<K extends Comparable, E> {
     if (isEmpty()) {
       return;
     }
-    heapPQ[1] = heapPQ[n - 1];
-    if (n >= 2) {
-      upHeap(2);
-    }
-    if (n >= 3) {
-      upHeap(3);
-    }
-    n--;
+    heapPQ[1] = heapPQ[n--];
+    heapPQ[n+1] = null;
+    downHeap(1);
   }
   // Các phương thức bổ sung
-  protected ArrEntry getParent(int i) {
-    return heapPQ[i >> 1]; // >>1 ~ /2, nhưng máy chạy nhanh hơn
-  }
 
   protected void swap(int i, int j) {
     ArrEntry temp = heapPQ[i];
@@ -66,41 +77,23 @@ public class MinHeapPriorityQueue<K extends Comparable, E> {
   }
 
   protected void upHeap(int i) { // vun lên
-    while (i > 1 && getParent(i).key.compareTo(heapPQ[i].key) > 0) { // Nếu chưa thỏa mãn
-      swap(i, i >> 1);
-      i >>= 1;
+    while (i > 1 && heapPQ[parent(i)].key.compareTo(heapPQ[i].key) > 0) { // Nếu chưa thỏa mãn
+      swap(i, parent(i));
+      i = parent(i);
     }
   }
 
   protected void downHeap(int i) { // vun xuống
-    int left = i << 1; // ~ 2*i
-    int right = i << 1 | 1; // ~ 2*i+1
-    while (i < n) {
-      if (right < n) { // This node has 2 children.
-        if (heapPQ[i].key.compareTo(heapPQ[left].key) < 0
-            && heapPQ[i].key.compareTo(heapPQ[right].key)
-                < 0) { // Node hiện tại đã bé hơn 2 node con
-          return; // Thoát
+    if (!isLeaf(i)) { // Nếu đây không phải là 1 node lá và có key lớn hơn bất kì
+      //      Node con nào => swap.
+      if (heapPQ[i].key.compareTo(heapPQ[left(i)].key) >= 0
+          || heapPQ[i].key.compareTo(heapPQ[right(i)].key) >= 0) {
+        if (heapPQ[left(i)].key.compareTo(heapPQ[right(i)].key) <= 0) {
+          swap(i, left(i));
+          downHeap(left(i));
         } else {
-          // Ưu tiên swap sang bên nào lớn hơn
-          if (heapPQ[left].key.compareTo(heapPQ[right].key) >= 0) {
-            swap(left, i);
-            i = left;
-          } else {
-            swap(right, i);
-            i = right;
-          }
-          left = i << 1;
-          right = i << 1 | 1;
-        }
-      } else {
-        if (left < n) {
-          if (heapPQ[i].key.compareTo(heapPQ[left].key) >= 0) {
-            swap(i, left);
-          }
-          return; // kết thúc luôn
-        } else {
-          return; // hết node con
+          swap(i, right(i));
+          downHeap(right(i));
         }
       }
     }
